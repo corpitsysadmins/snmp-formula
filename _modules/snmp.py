@@ -62,7 +62,7 @@ def del_user(username, snmpd_conf_path = '/etc/snmp/snmpd.conf', snmpd_conf_var_
 	Removes a user from the user list. Returns None.
 	'''
 	LOGGER.debug('Removing user %s ', username)
-	stop_snmpd()
+	__salt__['service.stop'](service_name)
 
 	with open (snmpd_conf_path, 'r') as f:
 		etc_lines = f.readlines()
@@ -78,4 +78,4 @@ def del_user(username, snmpd_conf_path = '/etc/snmp/snmpd.conf', snmpd_conf_var_
 			if 'usmUser' not in line.strip("\n"):
 				f1.write(line)
 
-	start_snmpd()
+	__salt__['service.start'](service_name)
