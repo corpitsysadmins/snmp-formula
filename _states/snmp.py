@@ -17,7 +17,7 @@ import logging
 LOGGER = logging.getLogger(__name__)
 
 
-def user_exists(username, snmpd_conf_path='/etc/snmp/snmpd.conf', **kwargs):
+def user_exists(name, snmpd_conf_path='/etc/snmp/snmpd.conf', **kwargs):
 	'''Link agent
 	Link and already installed Nessus/Tenable agent to a server.
 	'''
