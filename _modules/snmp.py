@@ -32,6 +32,12 @@ def check_user(username, snmpd_conf_path = '/etc/snmp/snmpd.conf'):
 def add_user(username, authpass, privpass, read_only = False, auth_hash_sha = True, encryption_aes = True):
 	'''Add user
 	Adds a user to the user list. Returns None.
+
+	Parameters:
+	- username: the user name
+	- authpass: snmpv3 authentication password
+	- privpass: snmpv3 privacy password
+
 	'''
 	parameters = []
 
