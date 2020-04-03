@@ -17,15 +17,18 @@ import logging
 LOGGER = logging.getLogger(__name__)
 
 
-def user_exists(name, authpass, privpass, read_only = False, auth_hash_sha = True, encryption_aes = True, snmpd_conf_path='/etc/snmp/snmpd.conf', **kwargs):
+def user_exists(name, authpass, privpass, read_only = True, auth_hash_sha = True, encryption_aes = True, snmpd_conf_path='/etc/snmp/snmpd.conf', **kwargs):
 	'''Add an SNMPv3 user
 	Creates an SNMPv3 user/password pair in the required configuration file.
 
 	Parameters:
 	- name: the user name
-	- snmpd_conf_path: the net-snmp configuration file
 	- authpass: snmpv3 authentication password
 	- privpass: snmpv3 privacy password
+	- read_only: If set to true (default) net-snmp-create-v3-user is executed with the -ro switch
+	- auth_hash_sha: If set to true (default) net-snmp-create-v3-user is executed with -a SHA. Otherwise -a MD5
+	- encryption_aes: If set to true (default) net-snmp-create-v3-user is executed with -x AES. Otherwise -x DES
+	- snmpd_conf_path: the net-snmp configuration file
 	'''
 	ret	=	{
 		'name'		: name,
