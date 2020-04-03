@@ -26,13 +26,13 @@ def user_exists(name, authpass, privpass, snmpd_conf_path='/etc/snmp/snmpd.conf'
 	- snmpd_conf_path: the net-snmp configuration file
 	'''
 	ret	=	{
-		'name'		: username,
+		'name'		: name,
 		'result'	: False,
 		'changes'	: {},
 		'comment'	: '',
 	}
 
-	if not __salt__['file.file_exists'](file):
+	if not __salt__['file.file_exists'](snmpd_conf_path):
 		if __opts__['test']:
 			ret['result'] = None
 			ret['comment'] = "The snmp-net doesn't seem to be installed; if installed in this state run, snmp user would have been created."
@@ -42,22 +42,22 @@ def user_exists(name, authpass, privpass, snmpd_conf_path='/etc/snmp/snmpd.conf'
 		return ret
 
 	try:
-		user_is_there = __salt__['snmp.check_user'](username)
+		user_is_there = __salt__['snmp.check_user'](name)
 	except RuntimeError as error:
 		ret['comment'] = 'Getting existence of snmp user failed: ' + str(error)
 		return ret
 
 	if user_is_there:
 			ret['result'] = True
-			ret['comment'] = 'User {} is already on the system'.format(username)
+			ret['comment'] = 'User {} is already on the system'.format(name)
 	else:
 		if __opts__['test']:
 			ret['result'] = None
-			ret['comment'] = 'The {} would be created'.format(username)
+			ret['comment'] = 'The {} would be created'.format(name)
 			ret['changes'].update({'SNMPv3' : {'new' : name}})
 		else:
 			try:
-				create_user = __salt__['snmp.add_user'](username, authpass, privpass, read_only = False, auth_hash_sha = True, encryption_aes = True)
+				create_user = __salt__['snmp.add_user'](name, authpass, privpass, read_only = False, auth_hash_sha = True, encryption_aes = True)
 			except RuntimeError:
 				ret['comment'] = "add_user command didn't run successfully"
 				return ret
