@@ -67,13 +67,18 @@ def user_exists(name, authpass, privpass, read_only = True, auth_hash_sha = True
 				ret['comment'] = "add_user command didn't run successfully"
 				return ret
 
+
 	return ret
 
-def user_gone(name, authpass, privpass, snmpd_conf_path='/etc/snmp/snmpd.conf', **kwargs):
-	'''Unlink agent
-	Unlink an already configured agent from the Nessus/Tenable server/cloud.
-	'''
+def user_gone(name, snmpd_conf_path='/etc/snmp/snmpd.conf', snmpd_conf_var_path = '/var/lib/net-snmp/snmpd.conf', **kwargs):
+	'''Delete an SNMPv3 user
+Removes an SNMPv3 user/password pair in the required configuration file. It triggers a service restart.
 
+	Parameters:
+	- name: the user name
+	- snmpd_conf_path: the net-snmp configuration file
+	- snmpd_conf_var_path: the net-snmp var configuration file
+	'''
 	ret	=	{
 		'name'		: name,
 		'result'	: False,
@@ -81,46 +86,35 @@ def user_gone(name, authpass, privpass, snmpd_conf_path='/etc/snmp/snmpd.conf', 
 		'comment'	: '',
 	}
 
-	if not __salt__['nessus_agent.is_configurable'](nessuscli):
-		ret['result'] = True
-		ret['comment'] = "The Nessus agent doesn't seems to be installed; if installed in this state run, it would have been unlinked"
+	if not __salt__['file.file_exists'](snmpd_conf_path):
+		if __opts__['test']:
+			ret['result'] = None
+			ret['comment'] = "The snmp-net doesn't seem to be installed; if installed in this state run, snmp user would have been created."
+		else:
+			ret['result'] = False
+			ret['comment'] = "The snmp-net doesn't seem to be installed. SNMP user cannot be created."
 		return ret
 
 	try:
-		status_results = __salt__['nessus_agent.run_agent_command'](nessuscli, 'status')
+		user_is_there = __salt__['snmp.check_user'](name)
 	except RuntimeError as error:
-		ret['comment'] = 'Getting the status of the agent failed: ' + str(error)
+		ret['comment'] = 'Getting existence of snmp user failed: ' + str(error)
 		return ret
 
-	if status_results > status_messages['unlinked']:
-		linked = False
-	elif status_results > status_messages['linked']:
-		linked = True
-		link_details = status_results(status_messages['linked'])
+	if user_is_there:
+			ret['result'] = True
+			ret['comment'] = 'User {} is already on the system'.format(name)
 	else:
-		ret['comment'] = 'Getting the status of the agent failed'
-		return ret
-
-	if linked:
 		if __opts__['test']:
 			ret['result'] = None
-			ret['comment'] = 'The agent would be unlinked from {}:{}'.format(link_details.server_host, link_details.server_port)
+			ret['comment'] = 'The {} would be deleted'.format(name)
+			ret['changes'].update({'SNMPv3' : {'new' : name}})
 		else:
 			try:
-				unlink_results = __salt__['nessus_agent.run_agent_command'](nessuscli, 'unlink')
+				create_user = __salt__['snmp.del_user'](username, snmpd_conf_path = '/etc/snmp/snmpd.conf', snmpd_conf_var_path = '/var/lib/net-snmp/snmpd.conf')
 			except RuntimeError:
-				ret['comment'] = "The unlink command didn't run successfully"
+				ret['comment'] = "del_user command didn't run successfully"
 				return ret
-			if unlink_results > status_messages['unlink_success']:
-				unlink_details = unlink_results(status_messages['unlink_success'])
-				ret['result'] = True
-				ret['comment'] = str(unlink_details)
-				ret['changes'].update({'nessus_agent' : {'old' : str(link_details), 'new' : str(unlink_details)}})
-			else:
-				ret['result'] = False
-				ret['comment'] = 'Unlinking failed: {}'.format(str(unlink_results))
-	else:
-		ret['result'] = True
-		ret['comment'] = 'The agent is already unlinked'
+
 
 	return ret
