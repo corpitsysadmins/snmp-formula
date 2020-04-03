@@ -115,7 +115,7 @@ Removes an SNMPv3 user/password pair in the required configuration file. It trig
 
 	else:
 		ret['result'] = True
-		ret['comment'] = 'User {} is already on the system'.format(name)
+		ret['comment'] = 'User {} is not present on the system'.format(name)
 
 
 
