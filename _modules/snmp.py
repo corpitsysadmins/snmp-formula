@@ -15,19 +15,6 @@ import logging
 
 LOGGER = logging.getLogger(__name__)
 
-def start_snmpd(init_binary = 'systemctl', parameters = ('start', 'snmpd.service')):
-	'''Start the SNMPd deamon
-	Use the init program to start the SNMPd deamon.
-	'''
-	LOGGER.debug('Starting service %s', parameters[1])
-	return __salt__['cmd.run']('{} {} {}'.format(init_binary, parameters[0], parameters[1]))
-
-def stop_snmpd(init_binary = 'systemctl', parameters = ('stop', 'snmpd.service')):
-	'''Stop the SNMPd deamon
-	Use the init program to stop the SNMPd deamon.
-	'''
-	LOGGER.debug('Stopping service %s', parameters[1])
-	return  __salt__['cmd.run']('{} {} {}'.format(init_binary, parameters[0], parameters[1]))
 
 def check_user(username, snmpd_conf_path = '/etc/snmp/snmpd.conf'):
 	'''Check user list
