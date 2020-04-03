@@ -38,34 +38,29 @@ def user_exists(name, snmpd_conf_path='/etc/snmp/snmpd.conf', **kwargs):
 		return ret
 
 	try:
-		is_user_there = __salt__['snmp.check_user'](username)
+		user_is_there = __salt__['snmp.check_user'](username)
 	except RuntimeError as error:
 		ret['comment'] = 'Getting existence of snmp user failed: ' + str(error)
 		return ret
 
-	if linked:
-		ret['result'] = True
-		ret['comment'] = 'The agent is already linked to {}:{}'.format(link_details.server_host, link_details.server_port)
+	if user_is_there:
+		if __opts__['test']:
+			ret['result'] = None
+			ret['comment'] = 'User {} is already on the system, nothing to do if command is run'.format(username)
+		else:
+			ret['result'] = True
+			ret['comment'] = 'User {} is already on the system'.format(username)
 	else:
 		if __opts__['test']:
 			ret['result'] = None
-			ret['comment'] = 'The agent would be linked to {host}:{port}'.format(**kwargs)
-			ret['changes'].update({'nessus_agent' : {'old' : str(unlink_details), 'new' : 'Linked to: {host}:{port}'.format(**kwargs)}})
+			ret['comment'] = 'The {} would be created'.format(username)
 		else:
 			try:
-				link_results = __salt__['nessus_agent.run_agent_command'](nessuscli, 'link', **kwargs)
+				create_user = __salt__['snmp.add_user'](username, authpass, privpass)
 			except RuntimeError:
-				ret['comment'] = "The unlink command didn't run successfully"
+				ret['comment'] = "add_user command didn't run successfully"
 				return ret
-			if link_results > status_messages['link_success']:
-				link_details = link_results(status_messages['link_success'])
-				ret['result'] = True
-				ret['comment'] = str(link_details)
-				ret['changes'].update({'nessus_agent' : {'old' : str(unlink_details), 'new' : str(link_details)}})
-			else:
-				ret['result'] = False
-				ret['comment'] = 'Unlinking failed: {}'.format(str(link_results))
-
+				
 	return ret
 
 def user_gone(name, nessuscli, status_messages):
