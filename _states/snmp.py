@@ -50,11 +50,11 @@ def user_exists(name, authpass, privpass, snmpd_conf_path='/etc/snmp/snmpd.conf'
 	if user_is_there:
 			ret['result'] = True
 			ret['comment'] = 'User {} is already on the system'.format(username)
-			ret['changes'].update({'SNMPv3' : {'new' : name}})
 	else:
 		if __opts__['test']:
 			ret['result'] = None
 			ret['comment'] = 'The {} would be created'.format(username)
+			ret['changes'].update({'SNMPv3' : {'new' : name}})
 		else:
 			try:
 				create_user = __salt__['snmp.add_user'](username, authpass, privpass, read_only = False, auth_hash_sha = True, encryption_aes = True)
