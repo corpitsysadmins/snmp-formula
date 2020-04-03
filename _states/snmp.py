@@ -11,7 +11,13 @@ Refs:
 - https://stackoverflow.com/questions/6819399/remove-user-in-snmp-by-agent
 '''
 
-def linked(username, snmpd_conf_path='/etc/snmp/snmpd.conf', **kwargs):
+import logging
+
+
+LOGGER = logging.getLogger(__name__)
+
+
+def user_exist(username, snmpd_conf_path='/etc/snmp/snmpd.conf', **kwargs):
 	'''Link agent
 	Link and already installed Nessus/Tenable agent to a server.
 	'''
@@ -62,7 +68,7 @@ def linked(username, snmpd_conf_path='/etc/snmp/snmpd.conf', **kwargs):
 
 	return ret
 
-def unlinked(name, nessuscli, status_messages):
+def user_gone(name, nessuscli, status_messages):
 	'''Unlink agent
 	Unlink an already configured agent from the Nessus/Tenable server/cloud.
 	'''
