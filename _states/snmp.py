@@ -17,9 +17,13 @@ import logging
 LOGGER = logging.getLogger(__name__)
 
 
-def user_exists(name, snmpd_conf_path='/etc/snmp/snmpd.conf', **kwargs):
-	'''Link agent
-	Link and already installed Nessus/Tenable agent to a server.
+def user_exists(name, authpass, privpass, snmpd_conf_path='/etc/snmp/snmpd.conf', **kwargs):
+	'''Add an SNMPv3 user
+	Creates an SNMPv3 user/password pair in the required configuration file.
+
+	Parameters:
+	- name: the user name
+	- snmpd_conf_path: the net-snmp configuration file
 	'''
 	ret	=	{
 		'name'		: username,
@@ -44,10 +48,6 @@ def user_exists(name, snmpd_conf_path='/etc/snmp/snmpd.conf', **kwargs):
 		return ret
 
 	if user_is_there:
-		if __opts__['test']:
-			ret['result'] = None
-			ret['comment'] = 'User {} is already on the system, nothing to do if command is run'.format(username)
-		else:
 			ret['result'] = True
 			ret['comment'] = 'User {} is already on the system'.format(username)
 	else:
@@ -56,14 +56,14 @@ def user_exists(name, snmpd_conf_path='/etc/snmp/snmpd.conf', **kwargs):
 			ret['comment'] = 'The {} would be created'.format(username)
 		else:
 			try:
-				create_user = __salt__['snmp.add_user'](username, authpass, privpass)
+				create_user = __salt__['snmp.add_user'](username, authpass, privpass, read_only = False, auth_hash_sha = True, encryption_aes = True)
 			except RuntimeError:
 				ret['comment'] = "add_user command didn't run successfully"
 				return ret
-				
+
 	return ret
 
-def user_gone(name, nessuscli, status_messages):
+def user_gone(name, authpass, privpass, snmpd_conf_path='/etc/snmp/snmpd.conf', **kwargs):
 	'''Unlink agent
 	Unlink an already configured agent from the Nessus/Tenable server/cloud.
 	'''
