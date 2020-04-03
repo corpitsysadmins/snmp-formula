@@ -38,7 +38,7 @@ def user_exists(name, snmpd_conf_path='/etc/snmp/snmpd.conf', **kwargs):
 		return ret
 
 	try:
-		status_results = __salt__['snmp.check_user'](username)
+		is_user_there = __salt__['snmp.check_user'](username)
 	except RuntimeError as error:
 		ret['comment'] = 'Getting existence of snmp user failed: ' + str(error)
 		return ret
