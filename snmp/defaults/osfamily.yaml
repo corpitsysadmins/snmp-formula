@@ -1,7 +1,7 @@
 RedHat:
     packages:
       - net-snmp
-      - net-snmp-utils
+    #  - net-snmp-utils
     options: /etc/sysconfig/snmpd
     optionstrap: /etc/sysconfig/snmptrapd
     sourceoptions: salt://snmp/files/snmpd.options

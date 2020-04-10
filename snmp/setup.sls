@@ -4,13 +4,20 @@ snmp-packages:
   pkg.installed:
     - pkgs: {{ snmp.packages }}
 
+snmp_conf:
+  file.managed:
+    - source: salt://snmp/files/snmpd.conf.jinja
+  #  - template: jinja
+  #  - context:
+  #    config: {{ conf.get('settings', {}) | json }}
+    - user: root
+    - group: {{ snmp.rootgroup }}
+    - mode: 644
+    - watch_in:
+      - service: {{ snmp.service }}
 
-2 - Backup the original snmpd.conf and create a new one with the bellow content:
 
-view    systemview    included   .1.3.6.1
-syslocation Unknown (edit /etc/snmp/snmpd.conf)
-syscontact Root <root@localhost> (configure /etc/snmp/snmp.local.conf)
-dontLogTCPWrappersConnects yes
+
 
 3 - Create SNMPv3 Read Only User:
 
