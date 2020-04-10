@@ -112,11 +112,14 @@ Removes an SNMPv3 user/password pair in the required configuration file. It trig
 			ret['changes'].update({'SNMPv3' : {'new' : name}})
 		else:
 			try:
-				delete_user = __salt__['snmp.del_user'](username, snmpd_conf_path = '/etc/snmp/snmpd.conf', snmpd_conf_var_path = '/var/lib/net-snmp/snmpd.conf')
+				delete_user = __salt__['snmp.del_user'](username, snmpd_conf_path, snmpd_conf_var_path)
 			except RuntimeError:
 				ret['comment'] = "del_user command didn't run successfully"
 				return ret
-
+			ret['result'] = True
+			ret['comment'] = 'The {} was deleted'.format(name)
+			ret['changes'].update({'SNMPv3' : {'new' : name}})
+			
 	else:
 		ret['result'] = True
 		ret['comment'] = 'User {} is not present on the system'.format(name)
