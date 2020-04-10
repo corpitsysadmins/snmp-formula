@@ -118,7 +118,7 @@ Removes an SNMPv3 user/password pair in the required configuration file. It trig
 				return ret
 			ret['result'] = True
 			ret['comment'] = 'The {} was deleted'.format(name)
-			ret['changes'].update({'SNMPv3' : {'new' : name}})
+			ret['changes'].update({'SNMPv3' : {'old' : name}})
 			
 	else:
 		ret['result'] = True
