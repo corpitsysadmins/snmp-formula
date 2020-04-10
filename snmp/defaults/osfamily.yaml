@@ -1,36 +1,41 @@
 RedHat:
-    packages:
-      - net-snmp
-    #  - net-snmp-utils
-    options: /etc/sysconfig/snmpd
-    optionstrap: /etc/sysconfig/snmptrapd
-    sourceoptions: salt://snmp/files/snmpd.options
-    sourceoptionstrap: salt://snmp/files/snmptrapd.options
+  packages:
+    - net-snmp
+  #  - net-snmp-utils
+  snmpd_conf:
+    path: /etc/snmp/snmpd.conf
+    user: root
+    group: root
+    mode: 600
+  options: /etc/sysconfig/snmpd
+  optionstrap: /etc/sysconfig/snmptrapd
+  sourceoptions: salt://snmp/files/snmpd.options
+  sourceoptionstrap: salt://snmp/files/snmptrapd.options
 Debian:
-    pkg: snmpd
-    pkgutils: snmp
-    configdefault: /etc/default/snmpd
-    sourcedefault: salt://snmp/files/snmpd.default
-    snmpdargs: -Lsd -Lf /dev/null -u snmp -g snmp -I -smux,mteTrigger,mteTriggerConf -p /var/run/snmpd.pid
-    mibs:
-    snmpdrun: "yes"
-    trapdrun: "no"
+  pkg: snmpd
+  pkgutils: snmp
+  configdefault: /etc/default/snmpd
+  sourcedefault: salt://snmp/files/snmpd.default
+  snmpdargs: -Lsd -Lf /dev/null -u snmp -g snmp -I -smux,mteTrigger,mteTriggerConf -p /var/run/snmpd.pid
+  mibs:
+  snmpdrun: "yes"
+  trapdrun: "no"
 Suse:
-    pkg: net-snmp
-    pkgutils: net-snmp
-    options: /etc/sysconfig/net-snmp
-    sourceoptions: salt://snmp/files/snmpd.options.suse
-    sourceoptionstrap: salt://snmp/files/snmptrapd.options.suse
+  pkg: net-snmp
+  pkgutils: net-snmp
+  options: /etc/sysconfig/net-snmp
+  sourceoptions: salt://snmp/files/snmpd.options.suse
+  sourceoptionstrap: salt://snmp/files/snmptrapd.options.suse
 Gentoo:
-    pkg: net-analyzer/net-snmp
-    configdefault: /etc/conf.d/snmpd
-    sourcedefault: salt://snmp/files/snmpd.confd
-    snmpdargs: -I -smux
-    mibs:
-    snmpdrun: "yes"
-    trapdrun: "no"
+  pkg: net-analyzer/net-snmp
+  configdefault: /etc/conf.d/snmpd
+  sourcedefault: salt://snmp/files/snmpd.confd
+  snmpdargs: -I -smux
+  mibs:
+  snmpdrun: "yes"
+  trapdrun: "no"
 FreeBSD:
-    config: /usr/local/etc/snmp/snmpd.conf
-    pkg: net-snmp
-    pkgutils: net-snmp
-    rootgroup: wheel
+  config: /usr/local/etc/snmp/snmpd.conf
+  pkg: net-snmp
+  pkgutils: net-snmp
+  rootgroup: wheel
