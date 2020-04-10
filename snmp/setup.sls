@@ -19,7 +19,7 @@ snmp-packages:
     - watch_in:
       - service: {{ snmp.service_name }}
 
-{%- if v3users is defined %}
+{%- if snmp.v3users is defined %}
 {%- for v3user, v3user_data in snmp.v3users.items() %}
 {{ v3user }}:
   snmp.user_exists:
