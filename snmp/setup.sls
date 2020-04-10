@@ -4,25 +4,38 @@ snmp-packages:
   pkg.installed:
     - pkgs: {{ snmp.packages }}
 
-{{ snmpd_conf.path }}:
+{{ snmp.snmpd_conf.path }}:
   file.managed:
     - source: salt://snmp/files/snmpd.conf.jinja
   #  - template: jinja
   #  - context:
   #    config: {{ conf.get('settings', {}) | json }}
-    - user: {{ snmpd_conf.user }}
-    - group: {{ snmpd_conf.group }}
-    - mode: {{ snmpd_conf.mode }}
-    #- watch_in:
-    #  - service: {{ snmp.service }}
+    - user: {{ snmp.snmpd_conf.user }}
+    - group: {{ snmp.snmpd_conf.group }}
+    - mode: {{ snmp.snmpd_conf.mode }}
+    - require:
+      - snmp-packages
+    - require_in:
+      - service: {{ snmp.service_name }}
+    - watch_in:
+      - service: {{ snmp.service_name }}
 
+{%- if v3users is defined %}
+{%- for v3user, v3user_data in snmp.v3users.items() %}
+{{ v3user }}:
+  snmp.user_exists:
+{%- for v3user_param, v3user_value in v3user_data.items() %}
+    - {{ v3user_param }}: {{ v3user_value }}
+{%- endfor %}
+    - require:
+      - snmp-packages
+    - require_in:
+      - service: {{ snmp.service_name }}
+    - watch_in:
+      - service: {{ snmp.service_name }}
+{%- endfor %}
+{%- endif %}
 
-#3 - Create SNMPv3 Read Only User:
-
-#net-snmp-create-v3-user -ro -A Abc12345qwert -X Abc12345qwert -a SHA -x AES prtg-linux
-
-#4 - Additionally we can add to snmpd.conf file the line (depending on the process to be monitored):
-#proc <process name>
-
-#5 - Configure firewall
-# firewall-cmd --permanent --add-service=snmp
+{{ snmp.service_name }}:
+  service.running:
+    - enable: true
