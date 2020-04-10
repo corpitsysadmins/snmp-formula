@@ -2,7 +2,7 @@
 
 snmp-packages:
   pkg.installed:
-    - pkgs: {{ snmp.packages }}
+    - pkgs: {{ snmp.packages|json }}
 
 {{ snmp.snmpd_conf.path }}:
   file.managed:
