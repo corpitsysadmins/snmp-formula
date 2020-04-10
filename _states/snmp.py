@@ -108,7 +108,7 @@ Removes an SNMPv3 user/password pair in the required configuration file. It trig
 	if user_is_there:
 		if __opts__['test']:
 			ret['result'] = None
-			ret['comment'] = 'The {} would be deleted'.format(name)
+			ret['comment'] = 'The user {} would be deleted'.format(name)
 			ret['changes'].update({'SNMPv3' : {'old' : name}})
 		else:
 			try:
@@ -117,7 +117,7 @@ Removes an SNMPv3 user/password pair in the required configuration file. It trig
 				ret['comment'] = "del_user command didn't run successfully"
 				return ret
 			ret['result'] = True
-			ret['comment'] = 'The {} was deleted'.format(name)
+			ret['comment'] = 'The user {} was deleted'.format(name)
 			ret['changes'].update({'SNMPv3' : {'old' : name}})
 
 	else:
