@@ -66,6 +66,10 @@ def user_exists(name, authpass, privpass, read_only = True, auth_hash_sha = True
 			except RuntimeError:
 				ret['comment'] = "add_user command didn't run successfully"
 				return ret
+			ret['result'] = True
+			ret['comment'] = 'The {} was created'.format(name)
+			ret['changes'].update({'SNMPv3' : {'new' : name}})
+
 
 
 	return ret
