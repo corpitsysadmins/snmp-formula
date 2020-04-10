@@ -3,3 +3,6 @@ top.sls
 *.swp
 .kitchen/
 .kitchen.local.yml
+
+# macOS
+.DS_Store
