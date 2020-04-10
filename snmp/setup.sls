@@ -8,7 +8,7 @@ snmp-packages:
   file.managed:
     - source: salt://snmp/files/snmpd.conf.jinja
     - template: jinja
-    - context: {}
+    - context: {{ snmp|json }}
     - user: {{ snmp.snmpd_conf.user }}
     - group: {{ snmp.snmpd_conf.group }}
     - mode: {{ snmp.snmpd_conf.mode }}
