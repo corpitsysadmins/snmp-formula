@@ -58,7 +58,7 @@ def user_exists(name, authpass, privpass, read_only = True, auth_hash_sha = True
 	else:
 		if __opts__['test']:
 			ret['result'] = None
-			ret['comment'] = 'The {} would be created'.format(name)
+			ret['comment'] = 'The user {} would be created'.format(name)
 			ret['changes'].update({'SNMPv3' : {'new' : name}})
 		else:
 			try:
@@ -67,7 +67,7 @@ def user_exists(name, authpass, privpass, read_only = True, auth_hash_sha = True
 				ret['comment'] = "add_user command didn't run successfully"
 				return ret
 			ret['result'] = True
-			ret['comment'] = 'The {} was created'.format(name)
+			ret['comment'] = 'The user {} was created'.format(name)
 			ret['changes'].update({'SNMPv3' : {'new' : name}})
 
 
