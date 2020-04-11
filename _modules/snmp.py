@@ -53,8 +53,11 @@ def add_user(username, authpass, privpass, service_name = 'snmpd' read_only = Tr
 	parameters += ['-x', 'AES' if encryption_aes else 'DES']
 	parameters += [username]
 	LOGGER.debug('Adding user %s ', username)
-	command_str = __salt__['cmd.run']('net-snmp-create-v3-user ' + ' '.join(parameters), raise_err = True)
-	
+	try:
+		command_str = __salt__['cmd.run']('net-snmp-create-v3-user ' + ' '.join(parameters), raise_err = True)
+	except:
+		return True
+	return False
 # 	if service_running:
 # 		__salt__['service.start'](service_name)
 
