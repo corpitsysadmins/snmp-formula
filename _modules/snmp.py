@@ -55,11 +55,11 @@ def add_user(username, authpass, privpass, service_name = 'snmpd', read_only = T
 	LOGGER.debug('Adding user %s ', username)
 	try:
 		command_str = __salt__['cmd.run']('net-snmp-create-v3-user ' + ' '.join(parameters), raise_err = True)
-	except:
-		return True
-	return False
-# 	if service_running:
-# 		__salt__['service.start'](service_name)
+	except Exception:
+		raise
+# 	finally:
+# 		if service_running:
+# 			__salt__['service.start'](service_name)
 
 def del_user(username, service_name = 'snmpd', snmpd_conf_path = '/etc/snmp/snmpd.conf', snmpd_conf_var_path = '/var/lib/net-snmp/snmpd.conf'):
 	'''Delete user
