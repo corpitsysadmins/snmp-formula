@@ -29,7 +29,7 @@ def check_user(username, snmpd_conf_path = '/etc/snmp/snmpd.conf'):
 		LOGGER.debug('User %s not found in the system', username)
 		return False
 
-def add_user(username, authpass, privpass, read_only = True, auth_hash_sha = True, encryption_aes = True):
+def add_user(username, service_name = 'snmpd', authpass, privpass, read_only = True, auth_hash_sha = True, encryption_aes = True):
 	'''Add user
 	Adds a user to the user list. Returns None.
 
@@ -39,6 +39,8 @@ def add_user(username, authpass, privpass, read_only = True, auth_hash_sha = Tru
 	- privpass: snmpv3 privacy password
 
 	'''
+	__salt__['service.stop'](service_name)
+
 	parameters = []
 
 	if read_only:
@@ -51,7 +53,9 @@ def add_user(username, authpass, privpass, read_only = True, auth_hash_sha = Tru
 	LOGGER.debug('Adding user %s ', username)
 	command_str = __salt__['cmd.run']('net-snmp-create-v3-user ' + ' '.join(parameters))
 
-def del_user(username, snmpd_conf_path = '/etc/snmp/snmpd.conf', snmpd_conf_var_path = '/var/lib/net-snmp/snmpd.conf'):
+	__salt__['service.start'](service_name)
+
+def del_user(username, service_name = 'snmpd', snmpd_conf_path = '/etc/snmp/snmpd.conf', snmpd_conf_var_path = '/var/lib/net-snmp/snmpd.conf'):
 	'''Delete user
 	Removes a user from the user list. Returns None.
 	'''
