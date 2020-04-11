@@ -29,7 +29,7 @@ def check_user(username, snmpd_conf_path = '/etc/snmp/snmpd.conf'):
 		LOGGER.debug('User %s not found in the system', username)
 		return False
 
-def add_user(username, service_name = 'snmpd', authpass, privpass, read_only = True, auth_hash_sha = True, encryption_aes = True):
+def add_user(username, authpass, privpass, service_name = 'snmpd' read_only = True, auth_hash_sha = True, encryption_aes = True):
 	'''Add user
 	Adds a user to the user list. Returns None.
 
