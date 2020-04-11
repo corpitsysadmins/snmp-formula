@@ -26,6 +26,8 @@ snmp-packages:
 {%- for v3user_param, v3user_value in v3user_data.items() %}
     - {{ v3user_param }}: {{ v3user_value }}
 {%- endfor %}
+    - service_name: {{ snmp.service_name }}
+    - snmpd_conf_path: {{ snmp.snmpd_conf.path }}
     - require:
       - snmp-packages
     - require_in:
