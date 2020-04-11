@@ -63,7 +63,7 @@ def user_exists(name, authpass, privpass, read_only = True, auth_hash_sha = True
 		else:
 			try:
 				create_user = __salt__['snmp.add_user'](name, authpass, privpass, read_only = False, auth_hash_sha = True, encryption_aes = True)
-			except RuntimeError:
+			except Exception:
 				ret['comment'] = "add_user command didn't run successfully"
 				return ret
 			ret['result'] = True
