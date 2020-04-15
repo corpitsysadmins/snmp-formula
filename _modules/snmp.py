@@ -41,7 +41,10 @@ def add_user(username, authpass, privpass, service_name = 'snmpd', read_only = T
 	'''
  	service_running = __salt__['service.status'](service_name)
  	if service_running:
+		LOGGER.debug('Service %s is running.', service_name)
  		__salt__['service.stop'](service_name)
+		LOGGER.debug('Stopping service %s .', service_name)
+
 
 	parameters = []
 
@@ -60,6 +63,7 @@ def add_user(username, authpass, privpass, service_name = 'snmpd', read_only = T
 	#finally:
 	if service_running:
  		__salt__['service.start'](service_name)
+		LOGGER.debug('Starting service %s .', service_name)
 
 def del_user(username, service_name = 'snmpd', snmpd_conf_path = '/etc/snmp/snmpd.conf', snmpd_conf_var_path = '/var/lib/net-snmp/snmpd.conf'):
 	'''Delete user
