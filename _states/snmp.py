@@ -17,7 +17,7 @@ import logging
 LOGGER = logging.getLogger(__name__)
 
 
-def user_exists(name, authpass, privpass, read_only = True, auth_hash_sha = True, encryption_aes = True, snmpd_conf_path='/etc/snmp/snmpd.conf', **kwargs):
+def user_exists(name, authpass, privpass, service_name = service_name, read_only = True, auth_hash_sha = True, encryption_aes = True, snmpd_conf_path='/etc/snmp/snmpd.conf', **kwargs):
 	'''Add an SNMPv3 user
 	Creates an SNMPv3 user/password pair in the required configuration file.
 
@@ -62,7 +62,7 @@ def user_exists(name, authpass, privpass, read_only = True, auth_hash_sha = True
 			ret['changes'].update({'SNMPv3' : {'new' : name}})
 		else:
 			try:
-				create_user = __salt__['snmp.add_user'](name, authpass, privpass, read_only = False, auth_hash_sha = True, encryption_aes = True)
+				create_user = __salt__['snmp.add_user'](name, authpass, privpass, service_name = service_name, read_only = True, auth_hash_sha = True, encryption_aes = True)
 			except Exception:
 				ret['comment'] = "add_user command didn't run successfully"
 				return ret
@@ -74,7 +74,7 @@ def user_exists(name, authpass, privpass, read_only = True, auth_hash_sha = True
 
 	return ret
 
-def user_gone(name, snmpd_conf_path='/etc/snmp/snmpd.conf', snmpd_conf_var_path = '/var/lib/net-snmp/snmpd.conf', **kwargs):
+def user_gone(name, service_name = service_name, snmpd_conf_path = '/etc/snmp/snmpd.conf', snmpd_conf_var_path = '/var/lib/net-snmp/snmpd.conf', **kwargs):
 	'''Delete an SNMPv3 user
 Removes an SNMPv3 user/password pair in the required configuration file. It triggers a service restart.
 
@@ -112,7 +112,7 @@ Removes an SNMPv3 user/password pair in the required configuration file. It trig
 			ret['changes'].update({'SNMPv3' : {'old' : name}})
 		else:
 			try:
-				delete_user = __salt__['snmp.del_user'](username, service_name =service_name, snmpd_conf_path = snmpd_conf_path, snmpd_conf_var_path = snmpd_conf_var_path)
+				delete_user = __salt__['snmp.del_user'](username, service_name = service_name, snmpd_conf_path = snmpd_conf_path, snmpd_conf_var_path = snmpd_conf_var_path)
 			except RuntimeError:
 				ret['comment'] = "del_user command didn't run successfully"
 				return ret
