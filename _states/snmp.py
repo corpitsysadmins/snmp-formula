@@ -17,7 +17,7 @@ import logging
 LOGGER = logging.getLogger(__name__)
 
 
-def user_exists(name, authpass, privpass, service_name = 'snmpd', read_only = True, auth_hash_sha = True, encryption_aes = True, snmpd_conf_path='/etc/snmp/snmpd.conf', **kwargs):
+def user_exists(name, authpass, privpass = None, service_name = 'snmpd', read_only = True, auth_hash_sha = True, encryption_aes = True, snmpd_conf_path='/etc/snmp/snmpd.conf', **kwargs):
 	'''Add an SNMPv3 user
 	Creates an SNMPv3 user/password pair in the required configuration file.
 
@@ -62,7 +62,7 @@ def user_exists(name, authpass, privpass, service_name = 'snmpd', read_only = Tr
 			ret['changes'].update({'SNMPv3' : {'new' : name}})
 		else:
 			try:
-				create_user = __salt__['snmp.add_user'](username = name, authpass = authpass, privpass = privpass, service_name = service_name, read_only = read_only, auth_hash_sha = auth_hash_sha, encryption_aes = encryption_aes)
+				create_user = __salt__['snmp.add_user'](username = name, authpass = authpass, privpass = authpass if privpass is None else privpass, service_name = service_name, read_only = read_only, auth_hash_sha = auth_hash_sha, encryption_aes = encryption_aes)
 			except Exception:
 				ret['comment'] = "add_user command didn't run successfully"
 				return ret
