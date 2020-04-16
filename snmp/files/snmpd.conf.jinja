@@ -9,10 +9,10 @@ dontLogTCPWrappersConnects yes
 
 {%- if v3users is defined %}
 {%- for v3user, v3user_data in v3users.items() %}
-{%- if ('read_only' in v3user_data) and v3user_data['read_only'] %}
-rouser {{ v3user }}
-{%- else %}
+{%- if ('read_only' in v3user_data) and not v3user_data['read_only'] %}
 rwuser {{ v3user }}
+{%- else %}
+rouser {{ v3user }}
 {%- endif %}
 {%- endfor %}
 {%- endif %}
