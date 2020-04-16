@@ -31,7 +31,7 @@ snmp-packages:
     - require:
       - snmp-packages
     - require_in:
-      - service: {{ snmp.service_name }}
+      - file: {{ snmp.snmpd_conf.path }}
     - watch_in:
       - service: {{ snmp.service_name }}
 {%- endfor %}

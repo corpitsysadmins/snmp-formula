@@ -9,6 +9,8 @@ sourcetrap: salt://snmp/files/snmptrapd.conf
 sourceagent: salt://snmp/files/snmp.conf
 trapdargs: -Lsd -p /var/run/snmptrapd.pid
 rootgroup: root
+system_location: Somewhere over the Rainbow
+system_contact: admins@snmp.formulas.salt
 v3users:
   testuser1:
     authpass: ASDdfg789
