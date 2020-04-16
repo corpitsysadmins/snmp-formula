@@ -37,7 +37,6 @@ def check_user(username, snmpd_conf_path = '/etc/snmp/snmpd.conf'):
 
 def add_user(username, authpass, privpass, service_name = 'snmpd', read_only = True, auth_hash_sha = True, encryption_aes = True):
 	'''Add user
-	Precondition: service_name has to be stopped.
 
 	Adds param username to snmpv3 list of users. Uses the net-snmp-create-v3-user which accept the following parameters:
 		-ro    creates a user with read-only permissions
@@ -50,7 +49,6 @@ def add_user(username, authpass, privpass, service_name = 'snmpd', read_only = T
  		-x DES|AES
               specifies the encryption algorithm
 
-	Postcondition: service_name has to be running.
 
 	This function returns None.
 
@@ -59,6 +57,7 @@ def add_user(username, authpass, privpass, service_name = 'snmpd', read_only = T
 	- authpass: snmpv3 authentication password.
 	- privpass: snmpv3 privacy password.
 	- service_name = 'snmpd': Systemd service name.
+	- snmpd_conf_path = '/etc/snmp/snmpd.conf': SNMP service main configuration file
 
 	'''
  	service_running = __salt__['service.status'](service_name)
@@ -92,18 +91,18 @@ def add_user(username, authpass, privpass, service_name = 'snmpd', read_only = T
 
 def del_user(username, service_name = 'snmpd', snmpd_conf_path = '/etc/snmp/snmpd.conf', snmpd_conf_var_path = '/var/lib/net-snmp/snmpd.conf'):
 	'''
-	Precondition: service_name has to be stopped.
 
 	Delete user. Removes param username from "snmpd_conf_var_path".
 	Removes line that contains string 'usmUser' from snmpd_conf_var_path.
 
-	Postcondition: service_name has to be running.
 
 	This function returns None.
 
 	Parameters:
 	- username: the user name.
 	- service_name = 'snmpd': Systemd service name.
+	- snmpd_conf_path = '/etc/snmp/snmpd.conf': SNMP service main configuration file
+	- snmpd_conf_var_path = '/var/lib/net-snmp/snmpd.conf': SNMP localized key is saved on this file.
 	'''
 
 	service_running = __salt__['service.status'](service_name)
