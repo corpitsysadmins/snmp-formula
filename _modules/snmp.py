@@ -68,9 +68,14 @@ def del_user(username, service_name = 'snmpd', snmpd_conf_path = '/etc/snmp/snmp
 	'''Delete user
 	Removes a user from the user list. Returns None.
 	'''
-	LOGGER.debug('Removing user %s ', username)
-	__salt__['service.stop'](service_name)
 
+	service_running = __salt__['service.status'](service_name)
+ 	LOGGER.debug('Service %s is running' if service_running else 'Service %s is not running', service_name)
+ 	if service_running:
+ 		LOGGER.debug('Stopping service %s', service_name)
+ 		__salt__['service.stop'](service_name)
+
+	LOGGER.debug('Removing user %s ', username)
 	with open (snmpd_conf_path, 'r') as f:
 		etc_lines = f.readlines()
 	with open (snmpd_conf_var_path, 'r') as f1:
@@ -85,4 +90,6 @@ def del_user(username, service_name = 'snmpd', snmpd_conf_path = '/etc/snmp/snmp
 			if 'usmUser' not in line.strip("\n"):
 				f1.write(line)
 
-	__salt__['service.start'](service_name)
+	if service_running:
+		LOGGER.debug('Starting service %s', service_name)
+		__salt__['service.start'](service_name)
