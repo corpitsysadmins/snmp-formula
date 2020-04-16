@@ -7,8 +7,8 @@ syscontact {{ system_contact }}
 {%- endif %}
 dontLogTCPWrappersConnects yes
 
-{%- if snmp.v3users is defined %}
-{%- for v3user, v3user_data in snmp.v3users.items() %}
+{%- if v3users is defined %}
+{%- for v3user, v3user_data in v3users.items() %}
 {%- if ('read_only' in v3user_data) and v3user_data['read_only'] %}
 rouser {{ v3user }}
 {%- else %}
