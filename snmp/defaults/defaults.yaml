@@ -14,10 +14,8 @@ system_contact: admins@snmp.formulas.salt
 v3users:
   testuser1:
     authpass: ASDdfg789
-    privpass: ASDdfg789
   testlegacyadmin:
     authpass: ASDdfg789
-    privpass: ASDdfg789
     read_only: False
     auth_hash_sha: False
     encryption_aes: False
