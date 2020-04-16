@@ -1,4 +1,7 @@
 view    systemview    included   .1.3.6.1
+{%- if system_name is defined %}
+sysname {{ system_name }}
+{%- endif %}
 {%- if system_location is defined %}
 syslocation {{ system_location }}
 {%- endif %}
