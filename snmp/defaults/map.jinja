@@ -3,7 +3,7 @@
 {% import_yaml 'snmp/defaults/os.yaml' as os %}
 {% import_yaml 'snmp/defaults/osfinger.yaml' as osfinger %}
 
-{% set snmp = salt['slsutil.merge'](defaults,
+{% set snmp_data = salt['slsutil.merge'](defaults,
     salt['grains.filter_by'](osfamily, grain='os_family',
       merge=salt['grains.filter_by'](os, grain='os',
         merge=salt['grains.filter_by'](osfinger, grain='osfinger',
