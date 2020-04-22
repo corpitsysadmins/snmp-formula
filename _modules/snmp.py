@@ -60,7 +60,7 @@ def add_user(username, authpass, privpass, service_name = 'snmpd', read_only = T
 	- snmpd_conf_path = '/etc/snmp/snmpd.conf': SNMP service main configuration file
 
 	'''
- 	service_running = __salt__['service.status'](service_name)
+	service_running = __salt__['service.status'](service_name)
 	# Adding logging
 	LOGGER.debug('Service %s is running' if service_running else 'Service %s is not running', service_name)
  	if service_running:
