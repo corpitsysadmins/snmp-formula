@@ -63,10 +63,10 @@ def add_user(username, authpass, privpass, service_name = 'snmpd', read_only = T
 	service_running = __salt__['service.status'](service_name)
 	# Adding logging
 	LOGGER.debug('Service %s is running' if service_running else 'Service %s is not running', service_name)
- 	if service_running:
+	if service_running:
 		# Adding logging
- 		LOGGER.debug('Stopping service %s', service_name)
- 		__salt__['service.stop'](service_name)
+		LOGGER.debug('Stopping service %s', service_name)
+		__salt__['service.stop'](service_name)
 
 	parameters = []
 
@@ -87,7 +87,7 @@ def add_user(username, authpass, privpass, service_name = 'snmpd', read_only = T
 	if service_running:
 		# Adding logging
 		LOGGER.debug('Starting service %s', service_name)
- 		__salt__['service.start'](service_name)
+		__salt__['service.start'](service_name)
 
 def del_user(username, service_name = 'snmpd', snmpd_conf_path = '/etc/snmp/snmpd.conf', snmpd_conf_var_path = '/var/lib/net-snmp/snmpd.conf'):
 	'''
@@ -108,10 +108,10 @@ def del_user(username, service_name = 'snmpd', snmpd_conf_path = '/etc/snmp/snmp
 	service_running = __salt__['service.status'](service_name)
 	# Adding logging
 	LOGGER.debug('Service %s is running' if service_running else 'Service %s is not running', service_name)
- 	if service_running:
+	if service_running:
 		# Adding logging
- 		LOGGER.debug('Stopping service %s', service_name)
- 		__salt__['service.stop'](service_name)
+		LOGGER.debug('Stopping service %s', service_name)
+		__salt__['service.stop'](service_name)
 
 	# Adding logging
 	LOGGER.debug('Removing user %s ', username)
